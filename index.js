@@ -1,10 +1,12 @@
 var GphApiClient = require('giphy-js-sdk-core')
 
 var deserializeGif = function(gif) {
-  id: gif.id,
-  url: gif.url,
-  title: gif.title,
-  image: gif.images.original,
+  return ({
+    id: gif.id,
+    url: gif.url,
+    title: gif.title,
+    image: gif.images.original,
+  })
 }
 
 var search = function(client, deserializer) {
