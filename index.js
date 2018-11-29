@@ -9,11 +9,7 @@ var deserializeGif = function(gif) {
   })
 }
 
-var search = function(client, deserializer) {
-  if (typeof deserialzier === "undefined") {
-    deserializer = deserializeGif
-  }
-
+var search = function(client) {
   return function(query) {
     return client.search('gifs', {
       q: query,
@@ -21,14 +17,14 @@ var search = function(client, deserializer) {
       rating: 'g',
       fmt: 'json'
     }).then(function(responseData) {
-      return responseData.data.map(deserializer)
+      return responseData.data.map(deserializeGif)
     })
   }
 }
 
-var gifSeacher = function(apiKey, deserializer) {
+var gifSeacher = function(apiKey) {
   if (!apiKey) {
-    console.error('You must supply and API key to gifSearch')
+    console.error('react-giphy-workshop-gif-searcher: You must supply an API key to gifSearcher')
     return;
   }
 
@@ -36,13 +32,12 @@ var gifSeacher = function(apiKey, deserializer) {
 
   return function(query) {
     if (client) {
-      return search(client, deserializer)(query)
+      return search(client)(query)
     } else {
       client = GphApiClient(apiKey)
-      return search(client, deserializer)(query)
+      return search(client)(query)
     }
   }
 }
 
 module.exports = gifSeacher
-
